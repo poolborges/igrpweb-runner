@@ -1,0 +1,33 @@
+
+
+----
+java -cp "BOOT-INF/lib/*:." org.springframework.boot.loader.JarLauncher
+----
+
+
+----
+java -cp "BOOT-INF/lib/*;." org.springframework.boot.loader.JarLauncher
+----
+
+
+* -cp ./com/*:./org/*
+
+== Load
+
+Classes
+
+* org.springframework.boot.loader.jar.JarFile
+
+There are three launcher subclasses (JarLauncher, WarLauncher, and PropertiesLauncher).
+
+
+* org.springframework.boot.loader.JarLauncher
+* org.springframework.boot.loader.WarLauncher
+* org.springframework.boot.loader.PropertiesLauncher
+
+
+== Page Load
+
+----
+nosi.core.gui.page.Page.loadPage(Page.java:171)
+----
