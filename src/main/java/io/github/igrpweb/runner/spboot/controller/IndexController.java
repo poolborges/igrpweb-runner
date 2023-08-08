@@ -1,4 +1,4 @@
-package io.github.igrpweb.runner.spboot;
+package io.github.igrpweb.runner.spboot.controller;
 
 import java.util.Map;
 import java.util.Map.Entry;
