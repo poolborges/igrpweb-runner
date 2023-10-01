@@ -1,0 +1,182 @@
+= Backend Sample
+
+
+.Add support for servlet
+----
+mvn quarkus:add-extension -Dextensions=”quarkus-undertow”
+----
+
+== Usefull Links and dev tips
+
+* http://localhost:8080/q/openapi?format=json
+* http://localhost:8080/q/swagger-ui
+
+
+----
+$ curl http://localhost:8080/q/openapi
+----
+
+
+.Generate Jar executable
+----
+.\mvnw.cmd clean package
+----
+
+.Generate Native executable
+----
+.\mvnw.cmd clean package -Pnative
+----
+
+
+== Docker
+
+
+----
+docker build -t pb-sample-backend  -f .\src\main\docker\Dockerfile.jvm .
+----
+
+----
+docker run -d -p 8080:8080 --name pb-sample-backend-run1 pb-sample-backend
+----
+
+
+----
+docker run --rm -it pb-sample-backend  bash
+----
+
+
+----
+-Dquarkus.http.host=0.0.0.0 -Djava.util.logging.manager=org.jboss.logmanager.LogManager -Dquarkus.datasource.jdbc.url=jdbc:mysql://db/pbsample
+----
+
+
+== Build Native 
+
+* Native builder Max Memory
+
+----
+ <quarkus.native.builder-image>quay.io/quarkus/ubi-quarkus-native-image:20.0.0-java11</quarkus.native.builder-image>-->
+ <quarkus.native.native-image-xmx>8192m</quarkus.native.native-image-xmx>
+----
+
+
+----
+mvn clean package -Pnative -Dquarkus.native.container-build=true -Dquarkus.native.native-image-xmx=
+----
+
+.Build image
+----
+docker build -t pb-sample-backend-native  -f .\src\main\docker\Dockerfile.native-multistage_01 .
+----
+
+
+.Run native 
+----
+docker run -d -p 8080:8080 --name pb-sample-backend-native-run1 pb-sample-backend-native
+----
+
+
+== Build debug 
+
+----
+mvn package -Pnative "-Dquarkus.native.container-build=true" -Dquarkus.native.debug.enabled=true
+----
+
+== Build for podman
+
+----
+mvn clean package -Pnative -DskipTests -Dquarkus.native.container-runtime=podman
+----
+
+
+
+----
+mvn -pl sgpf-webui quarkus:dev
+
+
+mvn -pl sgpf-rest quarkus:dev
+----
+
+
+== Developer HAL 
+
+
+* https://mvnrepository.com/artifact/io.quarkus/quarkus-hal/usages
+
+.Add Extensions
+----
+quarkus ext add io.quarkus:quarkus-hal
+----
+
+----
+@LinkResource(entityClassName = "org.acme.Record", rel = "list")
+@Produces({ MediaType.APPLICATION_JSON, "application/hal+json" })
+----
+
+
+Reference 
+
+* https://quarkus.io/guides/resteasy-reactive#json-hypertext-application-language-hal-support
+
+
+== LinkHeader (Web Links) - NOT USE THIS APPROACH
+
+
+Is alternative to HAL Aproach where link are part of content in body
+
+* io.quarkus:quarkus-resteasy-reactive-links
+
+How 
+
+*  Link: <meta.rdf>; rel=meta
+*  <link rel="meta" href="meta.rdf"/>
+
+reference
+
+* https://www.w3.org/wiki/LinkHeader
+* https://quarkus.io/guides/resteasy-reactive#web-links-support
+
+
+== Quote (Template)
+
+* https://quarkus.io/guides/qute
+
+== Reference
+
+OpenAPI Generator
+
+* https://openapi-generator.tech/docs/generators/jaxrs-spec/
+
+OpenAPI 
+
+* https://quarkus.io/guides/openapi-swaggerui
+* https://eclipse-ee4j.github.io/jersey.github.io/documentation/3.0.1/user-guide.html
+
+
+REST Data 
+
+* https://quarkus.io/guides/rest-data-panache#get-peoplepage0size2
+
+
+Docker GraalVM
+
+* https://blog.popescul.com/posts/2023-05-05-from-source-to-container-building-efficient-quarkus-docker-images/
+
+
+== GraalVM
+
+----
+set "JAVA_HOME=C:\Java\graalvm-ce-java17-22.3.0"
+set "PATH=%JAVA_HOME%\bin;%PATH%"
+
+
+set "GRAALVM_HOME=C:\Java\graalvm-ce-java17-22.3.0"
+set "PATH=%GRAALVM_HOME%\bin;%PATH%"
+
+quarkus build --native
+----
+
+
+----
+$env:GRAALVM_HOME="C:\Java\graalvm-ce-java17-22.3.0"
+----

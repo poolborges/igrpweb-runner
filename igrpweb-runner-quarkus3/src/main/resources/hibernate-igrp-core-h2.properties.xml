@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+<properties>
+
+    <comment>Hibernate Properties</comment>
+
+    <entry key="hibernate.connection.driver_class">org.h2.Driver</entry>
+    <entry key="hibernate.connection.url">jdbc:h2:~/db_igrp;IGNORECASE=TRUE;NON_KEYWORDS=INTERVAL,VALUE</entry>
+    <entry key="hibernate.connection.username">admin</entry>
+    <entry key="hibernate.connection.password">admin</entry>
+    <entry key="hibernate.hbm2ddl.auto">none</entry>
+    <entry key="hibernate.connection.isolation">2</entry>
+    <entry key="hibernate.connection.autocommit">false</entry>
+    <entry key="hibernate.connection.pool_size">5</entry>
+    <entry key="hibernate.hbm2ddl.jdbc_metadata_extraction_strategy">individually</entry>
+    <entry key="hibernate.current_session_context_class">org.hibernate.context.internal.ThreadLocalSessionContext</entry>
+    <entry key="hibernate.transaction.auto_close_session">DELAYED_ACQUISITION_AND_RELEASE_AFTER_TRANSACTION</entry>
+    <entry key="hibernate.dialect">org.hibernate.dialect.H2Dialect</entry>
+
+    <!-- Hikaricp configuration -->
+    <entry key="hibernate.connection.provider_class">org.hibernate.hikaricp.internal.HikariCPConnectionProvider</entry>
+    <entry key="hibernate.hikari.connectionTimeout">60000</entry>
+    <entry key="hibernate.hikari.idleTimeout">10000</entry>
+    <entry key="hibernate.hikari.minimumIdle">0</entry>
+    <entry key="hibernate.hikari.maximumPoolSize">10</entry>
+    <entry key="hibernate.hikari.maxLifetime">30000</entry>
+    <entry key="hibernate.hikari.leakDetectionThreshold">0</entry>
+    <entry key="hibernate.hikari.connectionTimeout">120000</entry>
+    <entry key="hibernate.hikari.idleTimeout">600000</entry>
+    <entry key="hibernate.hikari.maxLifetime">1800000</entry>
+
+</properties>
