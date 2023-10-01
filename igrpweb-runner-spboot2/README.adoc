@@ -1,0 +1,81 @@
+
+
+
+
+== IGRP XML XSL
+
+Should change this variable to test all ui component, without running IGRP
+
+.\IGRP\src\main\webapp\image\IGRP2.4/xsl/tmpl/IGRP-variables.tmpl.xsl
+----
+<!-- igrp path -->
+  <xsl:variable name="path">
+    <xsl:choose>
+      <xsl:when test="/rows/link_img">
+        <xsl:value-of select="/rows/link_img" />
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:text>/IGRP/images/IGRP/IGRP2.4</xsl:text>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:variable>
+  <!--/igrp path -->
+----
+
+
+
+.Editar (Optional)
+----
+<script>
+    window.location.href = "/images/IGRP/IGRP2.4/index.html"
+</script>
+----
+
+
+.Navegar ate diretory e Iniciar servidor php
+----
+cd \IGRP\src\main\webapp
+php -S localhost:9090 -t .\
+----
+
+
+----
+http://localhost:9090/images/IGRP/IGRP2.4/index.html
+
+http://localhost:9090/images/IGRP/IGRP2.4/xml/IGRP-home.xml
+----
+
+
+== Springboot Launcher 
+
+----
+java -cp "BOOT-INF/lib/*:." org.springframework.boot.loader.JarLauncher
+----
+
+
+----
+java -cp "BOOT-INF/lib/*;." org.springframework.boot.loader.JarLauncher
+----
+
+
+* -cp ./com/*:./org/*
+
+== Load
+
+Classes
+
+* org.springframework.boot.loader.jar.JarFile
+
+There are three launcher subclasses (JarLauncher, WarLauncher, and PropertiesLauncher).
+
+
+* org.springframework.boot.loader.JarLauncher
+* org.springframework.boot.loader.WarLauncher
+* org.springframework.boot.loader.PropertiesLauncher
+
+
+== Page Load
+
+----
+nosi.core.gui.page.Page.loadPage(Page.java:171)
+----
