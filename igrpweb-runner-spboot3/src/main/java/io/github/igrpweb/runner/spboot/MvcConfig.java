@@ -40,7 +40,7 @@ import org.springframework.web.servlet.view.JstlView;
 @EnableWebMvc
 public class MvcConfig implements WebMvcConfigurer {
     
-    public static String uploadDirectory = System.getProperty("user.home") + "/igrp/images";
+    public static String uploadDirectory = System.getProperty("user.home") + "/igrp";
     
     @Bean
     public SimpleUrlHandlerMapping customFaviconHandlerMapping() {
@@ -78,9 +78,17 @@ public class MvcConfig implements WebMvcConfigurer {
 
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
-        registry.addResourceHandler("/images/**")
+
+        registry.addResourceHandler("/images/images/IGRP/**")
                 .addResourceLocations(
-                        "classpath:/META-INF/resources/images/",
+                        "classpath:/META-INF/resources/images/IGRP/")
+                .setCachePeriod(3600)
+                .resourceChain(true)
+                .addResolver(new PathResourceResolver());
+        
+        registry.addResourceHandler("/images/IGRP/**")
+                .addResourceLocations(
+                        "classpath:/META-INF/resources/images/IGRP/",
                         //"classpath:/images/", 
                         //"/images/",
                         "file:" + uploadDirectory + "/")
@@ -88,13 +96,14 @@ public class MvcConfig implements WebMvcConfigurer {
                 .resourceChain(true)
                 .addResolver(new PathResourceResolver());
         
-        
-        // IGRP2.4 Has static path /IGRP
-        registry.addResourceHandler("/IGRP/images/IGRP/IGRP2.4/**")
-                .addResourceLocations("classpath:/META-INF/resources/images/IGRP/IGRP2.4/")
+        //
+        registry.addResourceHandler("/IGRP/images/IGRP/**")
+                .addResourceLocations(
+                        "classpath:/META-INF/resources/images/IGRP/")
                 .setCachePeriod(3600)
                 .resourceChain(true)
                 .addResolver(new PathResourceResolver());
+        
 
         registry.addResourceHandler("/webjars/**")
                 .addResourceLocations("classpath:/META-INF/resources/webjars/");
@@ -106,6 +115,7 @@ public class MvcConfig implements WebMvcConfigurer {
                 = new FilterRegistrationBean<>();
         registrationBean.setFilter(new ThreadLocalFilter());
         registrationBean.addUrlPatterns("/app/*");
+        registrationBean.addUrlPatterns("/webapps/*");
         registrationBean.setOrder(2);
         return registrationBean;
     }
@@ -119,6 +129,7 @@ public class MvcConfig implements WebMvcConfigurer {
         registrationBean.setFilter(new EncodingFilter());
         registrationBean.setInitParameters(initParameters);
         registrationBean.addUrlPatterns("/app/*");
+        registrationBean.addUrlPatterns("/webapps/*");
         registrationBean.setOrder(1);
         return registrationBean;
     }
@@ -129,6 +140,7 @@ public class MvcConfig implements WebMvcConfigurer {
                 = new FilterRegistrationBean<>();
         registrationBean.setFilter(new AuthenticationFilter());
         registrationBean.addUrlPatterns("/app/*");
+        registrationBean.addUrlPatterns("/webapps/*");
         registrationBean.setOrder(3);
         return registrationBean;
     }
@@ -136,7 +148,7 @@ public class MvcConfig implements WebMvcConfigurer {
     @Bean
     public ServletRegistrationBean igrpServletBean() {
         ServletRegistrationBean bean = new ServletRegistrationBean(
-                new IgrpServlet(), "/app/*");
+                new IgrpServlet(), "/app/*", "/webapps/*");
 
         MultipartConfigFactory factory = new MultipartConfigFactory();
         factory.setFileSizeThreshold(DataSize.ofMegabytes(0));

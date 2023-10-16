@@ -2,6 +2,49 @@
 
 
 
+== LOGIN 
+
+igrpweb
+
+* username: igrpweb@nosi.cv
+* password: 
+** Hash(SHA-256): dc4659bfb1dbb064106f5685aa87a41550402178b0cc4c43a52f82848bb78b34
+** Hash(SHA-256): 97c94ebe5d767a353b77f3c0ce2d429741f2e8c99473c3c150e2faa3d14c9da6
+
+Demo 
+
+* username: demo@nosi.cv
+* password: 
+** HASH(SHA-256): 60b1df41fa82696abea1deb198667eb7c4a60521dd471559a8c17efde8528913
+** 97c94ebe5d767a353b77f3c0ce2d429741f2e8c99473c3c150e2faa3d14c9da6
+
+ROOT 
+
+* username: root
+* password: Pa$$w0rd
+* HASH: 97c94ebe5d767a353b77f3c0ce2d429741f2e8c99473c3c150e2faa3d14c9da6
+
+
+
+== Change LOGIN Slide show 
+
+1900 x 1080
+
+* /images/IGRP/IGRP2.3/assets/img/login/1.jpg
+* /images/IGRP/IGRP2.3/assets/img/login/2.jpg
+* /images/IGRP/IGRP2.3/assets/img/login/3.jpg
+* /images/IGRP/IGRP2.3/assets/img/login/4.jpg
+
+
+== Reemote Images 
+
+* Kriol ()
+
+
+== Change LOGO
+
+* igrplogo 
+
 == IGRP XML XSL
 
 Should change this variable to test all ui component, without running IGRP
@@ -46,6 +89,35 @@ http://localhost:9090/images/IGRP/IGRP2.4/xml/IGRP-home.xml
 ----
 
 
+== Springboot
+
+
+----
+ java -Djarmode=layertools -jar .\target\irgpweb-spboot3.jar list
+----
+
+
+----
+RUN java -Djarmode=layertools -jar .\target\irgpweb-spboot3.jar extract
+----
+
+
+----
+FROM adoptopenjdk:11-jre-hotspot as builder
+WORKDIR application
+ARG JAR_FILE=target/*.jar
+COPY ${JAR_FILE} application.jar
+RUN java -Djarmode=layertools -jar application.jar extract
+
+FROM adoptopenjdk:11-jre-hotspot
+WORKDIR application
+COPY --from=builder application/dependencies/ ./
+COPY --from=builder application/spring-boot-loader ./
+COPY --from=builder application/snapshot-dependencies/ ./
+COPY --from=builder application/application/ ./
+ENTRYPOINT ["java", "org.springframework.boot.loader.JarLauncher"]
+----
+
 == Springboot Launcher 
 
 ----
@@ -78,4 +150,11 @@ There are three launcher subclasses (JarLauncher, WarLauncher, and PropertiesLau
 
 ----
 nosi.core.gui.page.Page.loadPage(Page.java:171)
+----
+
+
+== 
+
+----
+docker build --file igrpweb-container\container-04\Dockerfile --tag igrpweb:latest .
 ----

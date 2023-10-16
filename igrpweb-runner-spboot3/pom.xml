@@ -4,15 +4,15 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>io.github.nosicode.igrpweb</groupId>
-    <artifactId>igrpweb-runner-spboot</artifactId>
+    <artifactId>igrpweb-runner-spboot3</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <packaging>${app.packaging}</packaging>
-    <name>IGRPWeb.Runner.Springboot</name>
+    <name>IGRPWeb.Runner.Springboot3</name>
     <description>IGRPWeb Runner Spboot</description>
 
     <properties>
 
-        <igrp.source>${project.basedir}/../IGRP-Framework2023/IGRP</igrp.source>
+        <igrp.source>${project.basedir}/../../IGRP-Framework2023/IGRP</igrp.source>
 
         <app.packaging>war</app.packaging>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -444,7 +444,7 @@
 
         <!-- ============================================================== -->
         <!-- IGRP WEB Frontend Resources (from) -->
-        <!-- ============================================================== -->
+        <!-- ==============================================================  -->
         <dependency>
             <groupId>cv.nosicode.igrpweb</groupId>
             <artifactId>igrp-web-frontend2_3</artifactId>
@@ -455,7 +455,7 @@
             <artifactId>igrp-web-frontend2_4</artifactId>
             <version>2.4.0</version>
         </dependency>
-
+        
     </dependencies>
 
 
@@ -487,56 +487,7 @@
             </plugins>
         </pluginManagement>
         <plugins>
-            <plugin>
-                <artifactId>maven-antrun-plugin</artifactId>
-                <version>3.1.0</version>
-                <executions>
-                    <execution>
-                        <id>replace-source-file</id>
-                        <phase>process-sources</phase>
-                        <configuration>
-                            <target>
-                                <!--
-                                <move file="${project.basedir}/../IGRP/src/main/java/nosi/core/config/Config.java" tofile="src/main/java-copy/nosi/core/config/Config.java"/>
-                                <delete file="${project.build.outputDirectory}/appContextLocal.xml" />
-
-                                <delete file="${igrp.source}/src/main/java/nosi/core/config/Config.java" />
-                                <delete file="${igrp.source}/src/main/java/nosi/core/config/ConfigApp.java" />
-
-                                <delete file="${igrp.source}/src/main/java/nosi/core/filter/EncodingFilter.java" />
-                                <delete file="${igrp.source}/src/main/java/nosi/core/filter/ThreadLocalFilter.java" />
-
-                                <delete file="${igrp.source}/src/main/java/nosi/core/servlet/IgrpServlet.java" />
-
-                                <delete file="${igrp.source}/src/main/java/nosi/core/webapp/webservices/helpers/ConfigurationRequest.java" />
-
-                                <delete file="${igrp.source}/src/main/java/nosi/webapps/igrp/pages/login/LoginView.java" />
-
-                                <delete file="${igrp.source}/src/main/java/nosi/core/embedded/server/ContainerConfiguration.java" />
-                                <delete file="${igrp.source}/src/main/java/nosi/core/embedded/server/IGRPApplicationRunner.java" />
-                                -->
-                            </target>
-                        </configuration>
-                        <goals>
-                            <goal>run</goal>
-                        </goals>
-                    </execution>
-                    <execution>
-                        <id>restore-source-file</id>
-                        <phase>compile</phase>
-                        <configuration>
-                            <target>
-                                <!--
-                                <move file="src/main/java-copy/nosi/core/config/Config.java" tofile="${project.basedir}/../IGRP/src/main/java/nosi/core/config/Config.java"/>
-                                -->
-                            </target>
-                        </configuration>
-                        <goals>
-                            <goal>run</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
+            
 
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
@@ -692,7 +643,7 @@
                 -->
             </dependencies>
             <build>
-                <finalName>irgpweb-spboot</finalName>
+                <finalName>irgpweb-spboot3</finalName>
                 <resources>
                     <resource>
                         <directory>${project.basedir}/src/main/resources</directory>
@@ -746,6 +697,10 @@
                         <configuration>
                             <mainClass>io.github.igrpweb.runner.spboot.IgrpwebRunnerSpbootApplication</mainClass>
                             <layout>JAR</layout>
+                            <layers>
+                                <enabled>true</enabled>
+                                <configuration>${project.basedir}/src/layers/layers-01.xml</configuration>
+                            </layers>
                         </configuration>
                         
                         <executions>
@@ -774,6 +729,64 @@
                     </plugin>
                 </plugins>
             </reporting>
+        </profile>
+        
+        <profile>
+            <id>rm-patchs</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <artifactId>maven-antrun-plugin</artifactId>
+                        <version>3.1.0</version>
+                        <executions>
+                            <execution>
+                                <id>replace-source-file</id>
+                                <phase>process-sources</phase>
+                                <configuration>
+                                    <target>
+                                        <!--
+                                        <move file="${project.basedir}/../IGRP/src/main/java/nosi/core/config/Config.java" tofile="src/main/java-copy/nosi/core/config/Config.java"/>
+                                        <delete file="${project.build.outputDirectory}/appContextLocal.xml" />
+        
+                                        <delete file="${igrp.source}/src/main/java/nosi/core/config/Config.java" />
+                                        <delete file="${igrp.source}/src/main/java/nosi/core/config/ConfigApp.java" />
+        
+                                        <delete file="${igrp.source}/src/main/java/nosi/core/filter/EncodingFilter.java" />
+                                        <delete file="${igrp.source}/src/main/java/nosi/core/filter/ThreadLocalFilter.java" />
+        
+                                        <delete file="${igrp.source}/src/main/java/nosi/core/servlet/IgrpServlet.java" />
+        
+                                        <delete file="${igrp.source}/src/main/java/nosi/core/webapp/webservices/helpers/ConfigurationRequest.java" />
+        
+                                        <delete file="${igrp.source}/src/main/java/nosi/webapps/igrp/pages/login/LoginView.java" />
+        
+                                        <delete file="${igrp.source}/src/main/java/nosi/core/embedded/server/ContainerConfiguration.java" />
+                                        <delete file="${igrp.source}/src/main/java/nosi/core/embedded/server/IGRPApplicationRunner.java" />
+                                        -->
+                                    </target>
+                                </configuration>
+                                <goals>
+                                    <goal>run</goal>
+                                </goals>
+                            </execution>
+                            <execution>
+                                <id>restore-source-file</id>
+                                <phase>compile</phase>
+                                <configuration>
+                                    <target>
+                                        <!--
+                                        <move file="src/main/java-copy/nosi/core/config/Config.java" tofile="${project.basedir}/../IGRP/src/main/java/nosi/core/config/Config.java"/>
+                                        -->
+                                    </target>
+                                </configuration>
+                                <goals>
+                                    <goal>run</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
         </profile>
     </profiles>
 </project>

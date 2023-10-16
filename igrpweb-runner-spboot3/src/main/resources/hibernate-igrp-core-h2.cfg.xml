@@ -4,7 +4,7 @@
 	<session-factory>
 
 		<property name="hibernate.connection.driver_class">org.h2.Driver</property>
-		<property name="hibernate.connection.url">jdbc:h2:~/db_igrp;IGNORECASE=TRUE;NON_KEYWORDS=INTERVAL,VALUE</property>
+		<property name="hibernate.connection.url">jdbc:h2:~/db_igrp_2023;IGNORECASE=TRUE;NON_KEYWORDS=INTERVAL,VALUE</property>
 		<property name="hibernate.connection.username">admin</property>
 		<property name="hibernate.connection.password">admin</property>
 		<property name="hibernate.hbm2ddl.auto">none</property>
