@@ -6,16 +6,15 @@
     <groupId>io.github.nosicode.igrpweb</groupId>
     <artifactId>igrpweb-runner-spboot2</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <packaging>${app.packaging}</packaging>
+    <packaging>jar</packaging>
     <name>IGRPWeb.Runner.Springboot2</name>
     <description>IGRPWeb Runner Spboot</description>
     
     <properties>
         
-        <igrp.source>${project.basedir}/../IGRP-Framework2023/IGRP</igrp.source>
+        <start-class>io.github.igrpweb.runner.spboot.IgrpwebRunnerSpbootApplication</start-class>
+        <igrp.source>${project.basedir}/../../IGRP-Framework/IGRP</igrp.source>
         <dir.source>src/main/java</dir.source>
-            
-        <app.packaging>war</app.packaging>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 		
@@ -595,11 +594,6 @@
             <activation>
                 <activeByDefault>true</activeByDefault>
             </activation>
-            <properties>
-                <app.packaging>jar</app.packaging>
-                <start-class>io.github.igrpweb.runner.spboot.IgrpwebRunnerSpbootApplication</start-class>
-                <igrp.source>${project.basedir}/../IGRP-Framework/IGRP</igrp.source>
-            </properties>
             <dependencyManagement>
                 <dependencies>
                     <dependency>
@@ -615,7 +609,7 @@
             <dependencies>
                 <dependency>
                     <groupId>org.apache.cxf</groupId>
-                    <artifactId>cxf-rt-frontend-jaxrs</artifactId>
+                    <artifactId>cxf-rt-frontend-jaxrs</artifactId>  
                     <version>3.5.5</version>
                     <exclusions>
                         <exclusion>
