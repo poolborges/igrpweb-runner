@@ -11,7 +11,7 @@
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
         
-        <igrp.source>${project.basedir}/../IGRP-Framework2023/IGRP</igrp.source>
+        <igrp.source>${project.basedir}/../../IGRP-Framework2023/IGRP</igrp.source>
     </properties>
     
     <build>
