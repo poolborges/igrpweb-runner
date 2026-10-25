@@ -12,7 +12,7 @@
 
     <properties>
 
-        <igrp.source>${project.basedir}/../../IGRP-Framework2023/IGRP</igrp.source>
+        <igrp.source>${project.basedir}/../../IGRP-Framework/IGRP</igrp.source>
 
         <app.packaging>war</app.packaging>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -32,14 +32,14 @@
 
         <!-- Mapper, JSON, -->
         <gson.version>2.9.0</gson.version>
-        <json.version>20220320</json.version>
+        <json.version>20260814</json.version>
         <model.mapper.version>3.1.0</model.mapper.version>
         <org.mapstruct.version>1.4.2.Final</org.mapstruct.version>
 
         <!-- Apache properties -->
         <apache.libintl.version>0.18.3</apache.libintl.version>
         <apache.commons.beanutils.version>1.9.4</apache.commons.beanutils.version>
-        <apache.commons.lang3.version>3.12.0</apache.commons.lang3.version>
+        <apache.commons.lang3.version>3.21.0</apache.commons.lang3.version>
         <apache.commons.text.version>1.9</apache.commons.text.version>
         <apache.commons.io.version>2.11.0</apache.commons.io.version>
         <apache.logging.log4j.version>2.20.0</apache.logging.log4j.version>
@@ -90,7 +90,7 @@
 
 
         <!-- Flyway Migration API & Docker PostgreSQL -->
-        <flyway.version>8.5.8</flyway.version>
+        <flyway.version>13.10.0</flyway.version>
         <igrp.db.user>postgres</igrp.db.user>
         <igrp.db.password>softwaredeveloper</igrp.db.password>
         <igrp.db.dsn>jdbc:postgresql://localhost:5432/db_igrp</igrp.db.dsn> <!-- Comment this line when run IGRPWEB+Postgres+Docker -->
