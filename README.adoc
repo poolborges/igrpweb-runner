@@ -1,0 +1,172 @@
+= KriolOS IGRP Runner (`igrpweb-runner`)
+:toc: left
+:toclevels: 3
+:icons: font
+:source-highlighter: highlight.js
+
+Run **IGRP-Framework** web applications on modern Java 17+ runtimes (**Spring Boot 3** and **Quarkus 3**) without modifying the upstream `IGRP-Framework` source tree.
+
+== Project Structure
+
+[cols="1,3",options="header"]
+|===
+| Module / Directory | Description
+
+| `IGRP-Framework/`
+| Git submodule pointing to https://github.com/NOSiCode-CV/IGRP-Framework (`igrp-horizon-dev` branch). Referenced by the runner modules via `${igrp.source}`.
+
+| `igrp-web-frontend_2.3/`
+| Packages the IGRP 2.3 static web assets (`/images/IGRP/IGRP2.3/**`) into a WebJar-style JAR (`META-INF/resources/images/IGRP/IGRP2.3`).
+
+| `igrp-web-frontend_2.4/`
+| Packages the IGRP 2.4 static web assets (`/images/IGRP/IGRP2.4/**`) into a WebJar-style JAR (`META-INF/resources/images/IGRP/IGRP2.4`).
+
+| `igrpweb-runner-spboot3/`
+| **Spring Boot 3** runner (`io.github.igrpweb.runner.spboot`) using embedded Tomcat 10.1 and JBoss Weld (`weld-servlet-core`) as the Jakarta CDI 4.0 provider.
+
+| `igrpweb-runner-quarkus3/`
+| **Quarkus 3** runner (`io.github.igrpweb.runner.quarkus`) using Quarkus Undertow (`ServletExtension`), Vert.x static resource routing, and Quarkus ArC for CDI.
+|===
+
+---
+
+== Cloning the Repository (with Submodules)
+
+Because `IGRP-Framework` is included as a Git submodule, clone the repository using `--recurse-submodules`:
+
+[source,bash]
+----
+git clone --recurse-submodules https://github.com/poolborges/igrpweb-runner.git
+cd igrpweb-runner
+----
+
+If you have already cloned the repository without `--recurse-submodules`, initialize and fetch the submodule with:
+
+[source,bash]
+----
+git submodule update --init --recursive
+----
+
+To pull the latest changes from the tracked `IGRP-Framework` branch (`igrp-horizon-dev`):
+
+[source,bash]
+----
+git submodule update --remote --merge
+----
+
+---
+
+== Prerequisites
+
+* **Java 17+** (JDK 17 or newer)
+* **Apache Maven 3.8+** (or use the included `./mvnw` wrapper)
+
+=== Install Frontend Resource JARs (First-Time Setup)
+
+If `igrp-web-frontend2_3` and `igrp-web-frontend2_4` are not yet in your local Maven repository (`~/.m2`), install them first:
+
+[source,bash]
+----
+mvn -f igrp-web-frontend_2.3/pom.xml clean install
+mvn -f igrp-web-frontend_2.4/pom.xml clean install
+----
+
+---
+
+== Spring Boot 3 Runner (`igrpweb-runner-spboot3`)
+
+Base package: `io.github.igrpweb.runner.spboot`
+
+=== How It Works
+
+* **`MvcConfig`**:
+** Registers IGRP's `EncodingFilter`, `ThreadLocalFilter`, `AuthenticationFilter`, `BasicListener`, and `IgrpServlet` (`/app/*`, `/webapps/*`).
+** Configures static resource handlers for `/images/IGRP/**`, `/images/images/IGRP/**`, and `/IGRP/images/IGRP/**`.
+** Registers JBoss Weld (`org.jboss.weld.environment.servlet.Listener`) on the embedded Tomcat `StandardContext` so `jakarta.enterprise.inject.spi.CDI.current()` is available at runtime.
+* **`IndexController` & `CustomErrorController`**:
+** Redirects `/` and `/index.jsp` to `/app` and handles `/error` and `/error.jsp`.
+
+=== Running in Development Mode
+
+[source,bash]
+----
+mvn -f igrpweb-runner-spboot3/pom.xml spring-boot:run
+----
+
+=== Packaging and Running Executable JAR
+
+[source,bash]
+----
+mvn -f igrpweb-runner-spboot3/pom.xml clean package -DskipTests
+java -jar igrpweb-runner-spboot3/target/irgpweb-spboot3.jar
+----
+
+Once started, access:
+
+* **Application**: http://localhost:8080/app
+* **Actuator**: http://localhost:8080/actuator
+
+---
+
+== Quarkus 3 Runner (`igrpweb-runner-quarkus3`)
+
+Base package: `io.github.igrpweb.runner.quarkus`
+
+=== How It Works
+
+* **`QuarkusWebConfig`** (implements `io.undertow.servlet.ServletExtension`):
+** Registers and maps `EncodingFilter`, `ThreadLocalFilter`, `AuthenticationFilter`, `BasicListener`, and `IgrpServlet` (`/app/*`, `/webapps/*`, 50MB multipart config) in Undertow.
+** Configures Vert.x `Router` static resource handlers for `/resources/images/IGRP/*`, `/images/images/IGRP/*`, `/IGRP/images/IGRP/*`, and `/images/IGRP/*` (classpath + user upload directory).
+** Uses Quarkus **ArC** (`quarkus-arc`) natively as the Jakarta CDI provider.
+* **`IndexController` & `CustomErrorController`**:
+** Handles `/`, `/index.jsp`, `/error`, and `/error.jsp`.
+
+=== Running in Development Mode (with Live Reload)
+
+[source,bash]
+----
+mvn -f igrpweb-runner-quarkus3/pom.xml quarkus:dev
+----
+
+=== Packaging and Running
+
+[source,bash]
+----
+mvn -f igrpweb-runner-quarkus3/pom.xml clean package -DskipTests
+java -jar igrpweb-runner-quarkus3/target/quarkus-app/quarkus-run.jar
+----
+
+Once started, access:
+
+* **Application**: http://localhost:8080/app
+* **Quarkus Dev UI** (in dev mode): http://localhost:8080/q/dev/
+
+---
+
+== IGRP and CDI Architecture
+
+* **CDI Integration**: `IGRP-Framework` uses Jakarta CDI (`jakarta.enterprise.inject.spi.CDI.current()`) in `nosi.core.webapp.Controller` (`loadPage` and `getComponent`) to instantiate page controllers and resolve application components.
+* **Stereotypes** (`nosi.core.stereotype.*`):
+** `@IGRPComponent`: Base CDI `@Stereotype` + `@Singleton`.
+** `@IGRPController`: Stereotype for IGRP page controllers.
+** `@IGRPService`: Stereotype for business service components.
+** `@IGRPRepository`: Stereotype for data access / repository components.
+
+---
+
+== Testing Login
+
+By default, both runners initialize an embedded **H2** database (`HikariPool-hibernate-igrp-core-h2`) and run Flyway migrations automatically on startup.
+
+* **Default Demo User**: `demo@nosi.cv`
+* **Default Password**: `demo`
+
+You can verify authentication from the command line using `curl`:
+
+[source,bash]
+----
+curl -s -i -L -c /tmp/igrp_cookies.txt -b /tmp/igrp_cookies.txt \
+  -X POST -d "p_user=demo@nosi.cv&p_password=demo" \
+  "http://localhost:8080/webapps?r=igrp/login/login&dad=null"
+----
+

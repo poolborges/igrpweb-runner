@@ -12,7 +12,7 @@
 
     <properties>
 
-        <igrp.source>${project.basedir}/../../IGRP-Framework/IGRP</igrp.source>
+        <igrp.source>${project.basedir}/../IGRP-Framework/IGRP</igrp.source>
 
         <app.packaging>war</app.packaging>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

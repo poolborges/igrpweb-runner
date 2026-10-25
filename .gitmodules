@@ -1,0 +1,4 @@
+[submodule "IGRP-Framework"]
+	path = IGRP-Framework
+	url = https://github.com/NOSiCode-CV/IGRP-Framework.git
+	branch = igrp-horizon-dev
