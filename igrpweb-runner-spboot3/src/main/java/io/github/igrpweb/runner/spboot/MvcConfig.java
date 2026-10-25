@@ -12,6 +12,8 @@ import nosi.core.filter.EncodingFilter;
 import nosi.core.filter.ThreadLocalFilter;
 import nosi.core.listener.BasicListener;
 import nosi.core.servlet.IgrpServlet;
+import org.springframework.boot.web.embedded.tomcat.TomcatServletWebServerFactory;
+import org.springframework.boot.web.server.WebServerFactoryCustomizer;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.boot.web.servlet.MultipartConfigFactory;
 import org.springframework.boot.web.servlet.ServletListenerRegistrationBean;
@@ -159,6 +161,13 @@ public class MvcConfig implements WebMvcConfigurer {
         bean.setMultipartConfig(multipartConfig);
         bean.setLoadOnStartup(1);
         return bean;
+    }
+
+    @Bean
+    public WebServerFactoryCustomizer<TomcatServletWebServerFactory> weldTomcatCustomizer() {
+        return factory -> factory.addContextCustomizers(
+                context -> context.addApplicationListener(org.jboss.weld.environment.servlet.Listener.class.getName())
+        );
     }
 
     @Bean

@@ -153,8 +153,18 @@ nosi.core.gui.page.Page.loadPage(Page.java:171)
 ----
 
 
-== 
+== Docker Build
 
 ----
 docker build --file igrpweb-container\container-04\Dockerfile --tag igrpweb:latest .
+----
+
+
+== Teste Login 
+
+
+----
+curl -s -i -L -c /tmp/igrp_cookies.txt -b /tmp/igrp_cookies.txt \
+  -X POST -d "p_user=demo@nosi.cv&p_password=demo" \
+  "http://localhost:8080/webapps?r=igrp/login/login&dad=null"
 ----
